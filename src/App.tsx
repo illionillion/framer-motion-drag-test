@@ -1,24 +1,71 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useRef, useState } from "react";
+import { motion } from "framer-motion";
+import { Box, Button, Center, Input, Text } from "@chakra-ui/react";
+import { Drag, DragStateProps } from "./Drag";
 
 function App() {
+  const constraintsRef = useRef(null);
+  const endRef = useRef<HTMLDivElement>(null)
+  const [itemCount, setItemCount] = useState<number>(0)
+  const [point, setPoint] = useState<number>(0)
+  const [items, setItems] = useState<DragStateProps[]>([]);
+  const onClick = () => {
+    setItemCount(itemCount + 1)
+  };
+  useEffect(()=>{
+    if(itemCount === 0) return
+    setItems([...items, {id: itemCount}]);
+  }, [itemCount])
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <div>
+      <motion.div
+        ref={constraintsRef}
+        style={{
+          width: "100vw",
+          height: "100vh",
+        }}
+      >
+        <Center position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" display="flex" flexDirection="column" zIndex={2}>
+          <Text>point: {point}</Text>
+          <Button onClick={onClick}>+</Button>
+        </Center>
+        <div
+          style={{
+            width: "120px",
+            height: "120px",
+            background: "gray",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            top: 0,
+            left: 0,
+          }}
         >
-          Learn React
-        </a>
-      </header>
+          START
+        </div>
+        <div
+          style={{
+            width: "120px",
+            height: "120px",
+            background: "gray",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "absolute",
+            bottom: 0,
+            right: 0,
+          }}
+          ref={endRef}
+        >
+          GOAL
+        </div>
+        {items.map((val, key) => (
+          <Drag key={key} val={val} items={items} point={point} setPoint={setPoint} setItems={setItems} constraintsRef={constraintsRef} endRef={endRef} />
+        ))}
+      </motion.div>
     </div>
   );
 }
