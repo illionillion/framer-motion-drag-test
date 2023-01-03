@@ -5,17 +5,17 @@ import { Drag, DragStateProps } from "./Drag";
 
 function App() {
   const constraintsRef = useRef(null);
-  const endRef = useRef<HTMLDivElement>(null)
-  const [itemCount, setItemCount] = useState<number>(0)
-  const [point, setPoint] = useState<number>(0)
+  const endRef = useRef<HTMLDivElement>(null);
+  const [itemCount, setItemCount] = useState<number>(0);
+  const [point, setPoint] = useState<number>(0);
   const [items, setItems] = useState<DragStateProps[]>([]);
   const onClick = () => {
-    setItemCount(itemCount + 1)
+    setItemCount(itemCount + 1);
   };
-  useEffect(()=>{
-    if(itemCount === 0) return
-    setItems([...items, {id: itemCount}]);
-  }, [itemCount])
+  useEffect(() => {
+    if (itemCount === 0) return;
+    setItems([...items, { id: itemCount }]);
+  }, [itemCount]);
   return (
     <div>
       <motion.div
@@ -25,8 +25,16 @@ function App() {
           height: "100vh",
         }}
       >
-        <Center position="absolute" top="50%" left="50%" transform="translate(-50%, -50%)" display="flex" flexDirection="column" zIndex={2}>
-          <Text>point: {point}</Text>
+        <Center
+          position="absolute"
+          top="50%"
+          left="50%"
+          transform="translate(-50%, -50%)"
+          display="flex"
+          flexDirection="column"
+          zIndex={2}
+        >
+          <Text css={{WebkitTextStrokeWidth:"1px",WebkitTextStrokeColor:"gray"}}>point: {point}</Text>
           <Button onClick={onClick}>+</Button>
         </Center>
         <div
@@ -63,7 +71,16 @@ function App() {
           GOAL
         </div>
         {items.map((val, key) => (
-          <Drag key={key} val={val} items={items} point={point} setPoint={setPoint} setItems={setItems} constraintsRef={constraintsRef} endRef={endRef} />
+          <Drag
+            key={key}
+            val={val}
+            items={items}
+            point={point}
+            setPoint={setPoint}
+            setItems={setItems}
+            constraintsRef={constraintsRef}
+            endRef={endRef}
+          />
         ))}
       </motion.div>
     </div>
