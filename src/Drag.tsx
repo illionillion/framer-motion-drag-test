@@ -5,7 +5,9 @@ import {
   MutableRefObject,
   RefObject,
   SetStateAction,
+  useEffect,
   useRef,
+  useState,
 } from "react";
 export interface DragStateProps {
   id: number;
@@ -19,6 +21,10 @@ interface DragProps {
   constraintsRef: MutableRefObject<null>;
   endRef: RefObject<HTMLDivElement>;
 }
+interface positionStateProps {
+  x: number;
+  y: number;
+}
 export const Drag: FC<DragProps> = ({
   val,
   items,
@@ -29,12 +35,21 @@ export const Drag: FC<DragProps> = ({
   endRef,
 }) => {
   const dragRef = useRef<HTMLDivElement>(null);
+  const [positionState, setPositionState] = useState<positionStateProps>({
+    x: 0,
+    y: 0,
+  });
   const onCheck = () => {
     if (!dragRef.current) return;
     const style = window.getComputedStyle(dragRef.current as HTMLElement);
     const matrix = new WebKitCSSMatrix(style.transform);
+    console.log(val.id);
     console.log(matrix.m41);
     console.log(matrix.m42);
+    setPositionState({
+      x: matrix.m41,
+      y: matrix.m42,
+    });
 
     if (endRef.current) {
       // 要素の位置座標を取得
@@ -50,15 +65,22 @@ export const Drag: FC<DragProps> = ({
 
       if (matrix.m41 === x && matrix.m42 === y) {
         console.log("ok");
-        const newItems = items
-          .filter((item) => item.id !== val.id)
-          
+        console.log('delete', val.id);
+        const newItems = items.filter((item) => item.id !== val.id);
+
         console.log(newItems);
         setItems(newItems);
-        setPoint(point + 1)
+        setPoint(point + 1);
       }
     }
   };
+  useEffect(() => {
+    console.log(items);
+    console.log(val.id, positionState);
+    console.dir(dragRef.current?.style.transform);
+
+    // onCheck()
+  }, [items]);
   return (
     <motion.div
       ref={dragRef}
@@ -74,6 +96,7 @@ export const Drag: FC<DragProps> = ({
         justifyContent: "center",
         borderRadius: "50%",
         position: "absolute",
+        // transform: `translate(${positionState.x}px,${positionState.y}px)`
       }}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1, y: [50, 0] }}
