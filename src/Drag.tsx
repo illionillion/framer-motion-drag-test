@@ -64,7 +64,7 @@ export const Drag: FC<DragProps> = ({
 
       console.log(x, y);
 
-      if (matrix.m41 === x && matrix.m42 === y) {
+      if (Math.floor(matrix.m41) === Math.floor(x) && Math.floor(matrix.m42) === Math.floor(y)) {
         console.log("ok");
         console.log("delete", val.id);
 
