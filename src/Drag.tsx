@@ -94,6 +94,8 @@ export const Drag: FC<DragProps> = ({
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "50%",
+            borderColor:"gray",
+            borderWidth:"1px",
             position: "absolute",
           }}
           initial={{ opacity: 0 }}
