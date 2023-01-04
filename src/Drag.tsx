@@ -39,6 +39,7 @@ export const Drag: FC<DragProps> = ({
     x: 0,
     y: 0,
   });
+  const [exist, setExist] = useState<boolean>(true);
   const onCheck = () => {
     if (!dragRef.current) return;
     const style = window.getComputedStyle(dragRef.current as HTMLElement);
@@ -65,55 +66,54 @@ export const Drag: FC<DragProps> = ({
 
       if (matrix.m41 === x && matrix.m42 === y) {
         console.log("ok");
-        console.log('delete', val.id);
-        const newItems = items.filter((item) => item.id !== val.id);
+        console.log("delete", val.id);
 
-        console.log(newItems);
-        setItems(newItems);
-        setPoint(point + 1);
+        // const newItems = items.filter((item) => item.id !== val.id);
+        // setItems(newItems);
+        console.log(items);
+        
+
+        setExist(false);
+        setPoint(pre_point => pre_point + 1);
       }
     }
   };
-  useEffect(() => {
-    console.log(items);
-    console.log(val.id, positionState);
-    console.dir(dragRef.current?.style.transform);
-
-    // onCheck()
-  }, [items]);
   return (
-    <motion.div
-      ref={dragRef}
-      dragConstraints={constraintsRef}
-      drag
-      style={{
-        width: "120px",
-        height: "120px",
-        background: "#000",
-        color: "white",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        borderRadius: "50%",
-        position: "absolute",
-        // transform: `translate(${positionState.x}px,${positionState.y}px)`
-      }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1, y: [50, 0] }}
-      exit={{ opacity: 0, y: [50, 0] }}
-      transition={{ duration: 0.8, ease: "easeOut" }}
-      onDrag={(event, info) => {
-        console.log(info);
-      }}
-      onDragEnd={(event, info) => {
-        console.log(info);
-      }}
-      onDragTransitionEnd={() => {
-        console.log("Drag transition complete");
-        onCheck();
-      }}
-    >
-      Drag{val.id}
-    </motion.div>
+    <>
+      {exist && (
+        <motion.div
+          ref={dragRef}
+          dragConstraints={constraintsRef}
+          drag
+          style={{
+            width: "120px",
+            height: "120px",
+            background: "#000",
+            color: "white",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            borderRadius: "50%",
+            position: "absolute",
+          }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1, y: [50, 0] }}
+          exit={{ opacity: 0, y: [50, 0] }}
+          transition={{ duration: 0.8, ease: "easeOut" }}
+          onDrag={(event, info) => {
+            // console.log(info);
+          }}
+          onDragEnd={(event, info) => {
+            // console.log(info);
+          }}
+          onDragTransitionEnd={() => {
+            console.log("Drag transition complete");
+            onCheck();
+          }}
+        >
+          Drag{val.id}
+        </motion.div>
+      )}
+    </>
   );
 };
