@@ -34,7 +34,17 @@ function App() {
           flexDirection="column"
           zIndex={2}
         >
-          <Text css={{WebkitTextStrokeWidth:"1px",WebkitTextStrokeColor:"gray"}}>point: {point}</Text>
+          <Text
+            css={{
+              WebkitTextStrokeWidth: "1px",
+              WebkitTextStrokeColor: "gray",
+            }}
+          >
+            point:{" "}
+            <Text as="span" fontSize="2xl" color="floralwhite">
+              {point}
+            </Text>
+          </Text>
           <Button onClick={onClick}>+</Button>
         </Center>
         <div
